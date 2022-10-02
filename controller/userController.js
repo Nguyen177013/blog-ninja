@@ -20,8 +20,8 @@ const handleError = (err) => {
 const createToken = (user, admin = false) => {
   return jwt.sign({ user, admin }, process.env.HUTECH_TOKEN_SECRET, { expiresIn: process.env.HUTECH_TOKEN_LIFE });
 };
-const refreshToken = (req,res,next)=>{
-  const accessToken = req.cookies.jwt;
+const refreshToken = async (token)=>{
+  const accessToken = token;
   if(accessToken){
     const decoded = jwt.verify(accessToken,process.env.HUTECH_TOKEN_SECRET,{ignoreExpiration: true});
     if(decoded){
@@ -29,11 +29,9 @@ const refreshToken = (req,res,next)=>{
         user:decoded.user,
         admin:decoded.admin
       };
-      const token = createToken(user.user,user.admin);
-      res.cookie('jwt',token,{httpOnly:true,maxAge:_3days*1000,secure:true});
+      return {token: createToken(user.user,user.admin),user:await User.findById(decoded.user)}
     }
   }
-  res.redirect('/');
 }
 const login_get = (req, res) => {
   res.render("login", { title: "Login" });
