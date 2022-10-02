@@ -1,0 +1,57 @@
+<%-include('partials/header.ejs')%>
+<%-include('partials/nav.ejs')%>
+<div class="create-blog content">
+    <form action="/blog/post/<%=blog.id%>" method="post">
+        <label for="title">Blog Title</label>
+        <input type="text" id="title" name="title" required autocomplete="off" value="<%=blog.title%>">
+        <label for="snippet">Blog snippet:</label>
+        <input type="text" id="snippet" name = "snippet" required autocomplete="off" value="<%=blog.snippet%>">
+
+        <label for="body">Blog body</label>
+        <textarea  id="body" name="body" required><%-blog.body%></textarea>
+        <button>Submit</button>
+    </form>
+</div>
+<script src="/ckeditor.js"></script>
+<script>
+        CKEDITOR.config.toolbarCanCollapse = true;
+        CKEDITOR.config.width = 420;   
+        CKEDITOR.replace('body',{
+            extraPlugins:'filebrowser',
+            filebrowserBeowserUrl:'/list',
+            filebrowserUploadMethod:'form',
+            filebrowserUploadUrl:'/blog/upload',
+            toolbar: [
+        { name: 'document', items: [ 'Source', '-', 'NewPage', 'Preview', '-', 'Templates' ,'Image', '-', 'Undo', 'Redo' ] },	// Defines toolbar group with name (used to create voice label) and items in 3 subgroups.
+                    				// Defines toolbar group without name.
+		'/',																					// Line break - next group will be placed in new line.
+		            { name: 'basicstyles', items: [ 'Bold', 'Italic' ] }
+	                    ]
+        })
+</script>
+<script>
+    // const createBlog = async (url,body)=>{
+    //     try{
+    //         const response = await fetch(url,{
+    //             method: "PATCH",
+    //             headers:{"Content-Type": "application/json"},
+    //             body: JSON.stringify(body)
+    //         });
+    //         const json = await response.json();
+    //         return window.location.assign(json);
+    //     }
+    //     catch(err){
+    //         console.log(err);
+    //     }
+    // }
+    // let url= `/blog/post/<%=blog.id%>`;
+    // let title = document.querySelector('#title');
+    // let bodys = document.querySelector('#body');
+    // let snippet = document.querySelector('#snippet');
+    // let form = document.querySelector('button');
+    // form.addEventListener('click',(e)=>{
+    //     let data = {title:title.value,snippet:snippet.value,body:CKEDITOR.instances.body.getData()}  //instances. textarea #Id
+    //     createBlog(url,data);
+    // })
+</script>
+<%-include('partials/footer.ejs')%>

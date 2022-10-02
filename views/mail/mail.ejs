@@ -1,0 +1,54 @@
+<%-include('../partials/header.ejs')%>
+<%-include('../partials/nav.ejs')%>
+
+<header>
+  <div class="loading">
+    <div class="lds-dual-ring"></div>
+  </div>
+    <div class="headings">
+      <h2>Forgot Password</h2>
+    </div>
+    <form>
+      <label for="emails">Email</label>
+      <input type="text" name="email" autocomplete="off" required>
+      <div class="email error"></div>
+      <button> Send</button>
+    </form>
+    <div class="successMailer">
+        <div class="content">
+            <h2>Sending mail Successfully </h2>
+            <h3>please check your mailbox</h5>
+        </div>
+    </div>
+  </header>
+  <script>
+    let form = document.querySelector('form');
+    let emailError = document.querySelector('.email.error');
+    let loading = document.querySelector('.loading');
+    let success = document.querySelector('.successMailer');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        loading.style.display = 'flex';
+        let email = form.email.value;
+        try {
+          const res = await fetch('/sendmail', {
+            method: 'POST',
+            body: JSON.stringify({email}),
+            headers: { 'Content-Type': 'application/json' },
+          })
+          const data = await res.json();
+          if (data.error) {
+            loading.style.display = 'none';
+            emailError.innerHTML = data.error.email;
+          }
+          if(data.user){
+            loading.style.display = 'none';
+            form.style.display = 'none';
+            success.style.display = 'block';
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      })
+  </script>
+<%-include('../partials/footer.ejs')%>

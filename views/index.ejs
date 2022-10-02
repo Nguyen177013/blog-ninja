@@ -1,0 +1,25 @@
+<%-include('partials/header.ejs')%>
+    <%-include('partials/nav.ejs')%>
+        <div class="blogs content">
+            <% if(data.length> 0){%>              
+                <h2>All Blogs</h2>
+                    <%data.forEach(blog=>{%>
+                        <a href="/blog/detail/<%=blog.id%>" class="single">
+                            <h4><%=blog?.title %></h4>
+                            <p><%=blog?.snippet %></p>
+                            <p class="author">by: <%= blog.userId%></p>
+                        </a>
+                        <% }) %>
+                <%}else{%>
+                    <h2>There're no blogs to display</h2>
+                <%}%>
+        </div>
+        <div class="pagination">
+        </div>
+        <script>
+            const select = '<%=selected%>';
+            console.log(select);
+            const pages = '<%=pages%>';
+        </script>
+        <script src="/script/index.js"></script>
+        <%-include('partials/footer.ejs')%>

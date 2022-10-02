@@ -1,0 +1,30 @@
+<%-include('partials/header.ejs')%>
+<%-include('partials/nav.ejs')%>
+<h3><%=blog.title %></h2>
+<p><%=blog.snippet %></p>
+<br>
+<br>
+<div class="details content">
+    <div class="content">
+        <p><%-blog.body %></p>
+    </div>
+    <%if(user){%>
+    <%if(blog.userId === user.id || user.admin === true){%>
+    <a href="/blog/edit/<%=blog._id%>" class="edit">edit</a>
+    <a class="delete" data-doc="<%=blog._id%>">delete</a>
+        <%}%>
+    <%}%>
+</div>
+<script>
+    let removeBlog = async(url)=>{
+        const response = await fetch(url,{method:"DELETE"});
+        const json = await response.json();
+        return window.location.assign(json);
+    }
+    let remove = document.querySelector('.delete');
+    let url = `/blog/delete/${remove.dataset.doc}`;
+    remove.addEventListener('click',(e)=>{
+        removeBlog(url)
+    })
+</script>
+<%-include('partials/footer.ejs')%>
