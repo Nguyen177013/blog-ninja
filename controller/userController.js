@@ -41,10 +41,10 @@ const sendEmail_get = (req, res) => {
 };
 // send mail method
 const sendEmail_post = async (req, res) => {
+
   const { email } = req.body;
   try {
     const user = await User.checkMail(email);
-    console.log(user);
     // // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
       service: "Gmail",

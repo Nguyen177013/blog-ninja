@@ -33,13 +33,13 @@ app.get('/',(req, res) => {
     res.redirect('blog');
 });
 app.get('/about',(req, res)=>{
-    console.log('this is req data: ',req.data);
+
     res.render('about',{title:'about'});
 });
 app.use('/blog',blogRouter);
 app.use(userRouter);
 app.use((req, res)=>{
-    res.render('404',{title:404});
+    res.status(404).render('404',{title:404});
 });
 
 // console.log(process.env.HUTECH_TOKEN_SECRET);

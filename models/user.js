@@ -33,7 +33,7 @@ userSchema.statics.login = async function (email,password){
     throw Error('email');
 }
 userSchema.statics.checkMail = async function(email){
-    const user = await this.findOne({email});
+    const user = await this.findOne({email}); 
     if(user){
         return user;
     }
