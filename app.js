@@ -8,10 +8,11 @@ const cookieParser = require("cookie-parser");
 const {checkUser} = require('./middleware/authMiddleware')
 const url = "mongodb+srv://Nguyen177013:Nguyen150801@cluster0.snsfek6.mongodb.net/note-tuts?retryWrites=true&w=majority";
 const app = express();
+const port = process.env.PORT || 3000;
 // console.log(process.env.HUTECH_REFRESH_TOKEN)
 const connect = async (url)=>{
     let routing = await mongoose.connect(url);
-    app.listen(3000,()=>{
+    app.listen(port,()=>{
         console.log('router đã được kích hoạt cổng 3000');
     })
 }
