@@ -30,6 +30,7 @@ app.use(morgan('dev'));
 
 app.get('*',checkUser)
 app.get('/',(req, res) => {
+    req.params
         const token = req.cookies.jwt;
     res.redirect('blog');
 });

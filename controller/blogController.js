@@ -2,7 +2,7 @@ const Blog = require('../models/blog');
 const User = require('../models/user');
 const fs = require('fs');
 const path = require('path');
-
+const cloudinary = require('../cloudinary');
 const index = async (req,res)=>{
     // console.log('this is data: ',req.data);
     const users = await User.find();
@@ -60,21 +60,14 @@ const create_post = async (req,res)=>{
 }
 const uploadImg = (req,res)=>{
     // console.log(path.join(__dirname,'..','public','images'));
-    fs.readFile(req.files.upload.path,function(err, data){
+    fs.readFile(req.files.upload.path, async function(err, data){
         var newPath = path.join(__dirname,'..','public','images',req.files.upload.name)
-        console.log(newPath);
-        fs.writeFile(newPath,data,function(err){
-            if(err)console.log({err:err});
-            else{
-                console.log(req.files.upload.originalFilename);
-                let fileName = req.files.upload.name;
-                let url = '/images/'+fileName;
+        const result = await cloudinary.v2.uploader.upload(req.files.upload.path,{folder: '177013'});
+        console.log(result);
+                let url = result.secure_url;
                 let msg = 'Successfully uploaded';
                 let funcNum = req.query.CKEditorFuncNum;
-                console.log({url,msg,funcNum});
                 res.status(201).send("<script>window.parent.CKEDITOR.tools.callFunction('"+funcNum+"','"+url+"','"+msg+"');</script>");
-            }
-        })
     })
 }
 const detail_get = async (req,res)=>{
@@ -115,6 +108,11 @@ const blogData = async(req, res)=>{
     const blogs = await Blog.find().skip(page*blogsPerPage).limit(blogsPerPage);
     res.json({blogs});
 }
+const search = async(req, res)=>{
+    console.log(req.params);
+    console.log(req.query);
+    res.json({query:req.query,params:req.params.id});
+}
 module.exports = {
     index,
     pages,
@@ -125,5 +123,6 @@ module.exports = {
     edit_get,
     edit_patch,
     delete_blog,
-    blogData
+    blogData,
+    search
 }
